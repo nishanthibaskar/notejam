@@ -67,11 +67,11 @@ class SignupTestCase(NotejamBaseTestCase):
         response = self.client.post(
             url_for("signup"), data=self._get_user_data())
         self.assertRedirects(response, url_for('signin'))
-        self.assertEqual(1, User.query.count())
+        self.assertEquals(1, User.query.count())
 
     def test_signup_fail_required_fields(self):
         self.client.post(url_for("signup"), data={})
-        self.assertEqual(
+        self.assertEquals(
             set(self._get_user_data().keys()),
             set(self.get_context_variable('form').errors.keys())
         )
@@ -81,23 +81,23 @@ class SignupTestCase(NotejamBaseTestCase):
         self.create_user(**data)
 
         self.client.post(url_for("signup"), data=self._get_user_data())
-        self.assertEqual(
-            ['email'], list(self.get_context_variable('form').errors.keys()))
+        self.assertEquals(
+            ['email'], self.get_context_variable('form').errors.keys())
 
     def test_signup_fail_invalid_email(self):
         data = self._get_user_data()
         data['email'] = 'invalid email'
 
         self.client.post(url_for("signup"), data=data)
-        self.assertEqual(
-            ['email'], list(self.get_context_variable('form').errors.keys()))
+        self.assertEquals(
+            ['email'], self.get_context_variable('form').errors.keys())
 
     def test_signup_fail_passwords_dont_match(self):
         invalid_data = self._get_user_data(password='another pass')
         self.client.post(url_for('signup'), data=invalid_data)
-        self.assertEqual(
+        self.assertEquals(
             ['repeat_password'],
-            list(self.get_context_variable('form').errors.keys())
+            self.get_context_variable('form').errors.keys()
         )
 
 
@@ -120,11 +120,11 @@ class SigninTestCase(NotejamBaseTestCase):
     def test_signin_fail(self):
         response = self.client.post(
             url_for('signin'), data=self._get_user_data())
-        self.assertIn('Wrong email or password', str(response.data))
+        self.assertIn('Wrong email or password', response.data)
 
     def test_signin_fail_required_fields(self):
         self.client.post(url_for("signin"), data={})
-        self.assertEqual(
+        self.assertEquals(
             set(self._get_user_data().keys()),
             set(self.get_context_variable('form').errors.keys())
         )
@@ -134,8 +134,8 @@ class SigninTestCase(NotejamBaseTestCase):
         data['email'] = 'invalid email'
 
         self.client.post(url_for("signin"), data=data)
-        self.assertEqual(
-            ['email'], list(self.get_context_variable('form').errors.keys()))
+        self.assertEquals(
+            ['email'], self.get_context_variable('form').errors.keys())
 
 
 class PadTestCase(NotejamBaseTestCase):
@@ -145,14 +145,14 @@ class PadTestCase(NotejamBaseTestCase):
         with signed_in_user(user) as c:
             response = c.post(url_for('create_pad'), data={'name': 'pad'})
             self.assertRedirects(response, '/')
-            self.assertEqual(1, Pad.query.count())
+            self.assertEquals(1, Pad.query.count())
 
     def test_create_fail_required_name(self):
         user = self.create_user(email='email@example.com', password='password')
         with signed_in_user(user) as c:
             c.post(url_for('create_pad'), data={})
-            self.assertEqual(
-                ['name'], list(self.get_context_variable('form').errors.keys()))
+            self.assertEquals(
+                ['name'], self.get_context_variable('form').errors.keys())
 
     def test_create_fail_anonymous_user(self):
         response = self.client.post(
@@ -172,15 +172,15 @@ class PadTestCase(NotejamBaseTestCase):
             response = c.post(
                 url_for('edit_pad', pad_id=pad.id), data={'name': new_name})
             self.assertRedirects(response, url_for('pad_notes', pad_id=pad.id))
-            self.assertEqual(new_name, Pad.query.get(pad.id).name)
+            self.assertEquals(new_name, Pad.query.get(pad.id).name)
 
     def test_edit_fail_required_name(self):
         user = self.create_user(email='email@example.com', password='password')
         pad = self.create_pad(name='pad', user=user)
         with signed_in_user(user) as c:
             c.post(url_for('edit_pad', pad_id=pad.id), data={'name': ''})
-            self.assertEqual(
-                ['name'], list(self.get_context_variable('form').errors.keys()))
+            self.assertEquals(
+                ['name'], self.get_context_variable('form').errors.keys())
 
     def test_edit_fail_anothers_user(self):
         user = self.create_user(email='email@example.com', password='password')
@@ -191,7 +191,7 @@ class PadTestCase(NotejamBaseTestCase):
             new_name = 'new pad name'
             response = c.post(
                 url_for('edit_pad', pad_id=pad.id), data={'name': new_name})
-            self.assertEqual(404, response.status_code)
+            self.assertEquals(404, response.status_code)
 
     def test_delete_success(self):
         user = self.create_user(email='email@example.com', password='password')
@@ -200,7 +200,7 @@ class PadTestCase(NotejamBaseTestCase):
             response = c.post(
                 url_for('delete_pad', pad_id=pad.id))
             self.assertRedirects(response, url_for('home'))
-            self.assertEqual(0, Pad.query.count())
+            self.assertEquals(0, Pad.query.count())
 
     def test_delete_fail_anothers_user(self):
         user = self.create_user(email='email@example.com', password='password')
@@ -210,7 +210,7 @@ class PadTestCase(NotejamBaseTestCase):
         with signed_in_user(another_user) as c:
             response = c.post(
                 url_for('delete_pad', pad_id=pad.id))
-            self.assertEqual(404, response.status_code)
+            self.assertEquals(404, response.status_code)
 
 
 class NoteTestCase(NotejamBaseTestCase):
@@ -227,13 +227,13 @@ class NoteTestCase(NotejamBaseTestCase):
             response = c.post(
                 url_for('create_note'), data=self._get_note_data())
             self.assertRedirects(response, '/')
-            self.assertEqual(1, Note.query.count())
+            self.assertEquals(1, Note.query.count())
 
     def test_create_fail_required_fields(self):
         user = self.create_user(email='email@example.com', password='password')
         with signed_in_user(user) as c:
             c.post(url_for('create_note'), data={})
-            self.assertEqual(
+            self.assertEquals(
                 set(self._get_note_data().keys()),
                 set(self.get_context_variable('form').errors.keys())
             )
@@ -246,8 +246,8 @@ class NoteTestCase(NotejamBaseTestCase):
         with signed_in_user(user) as c:
             c.post(
                 url_for('create_note'), data=self._get_note_data(pad=pad.id))
-            self.assertEqual(
-                ['pad'], list(self.get_context_variable('form').errors.keys())
+            self.assertEquals(
+                ['pad'], self.get_context_variable('form').errors.keys()
             )
 
     def test_create_fail_anonymous_user(self):
@@ -270,7 +270,7 @@ class NoteTestCase(NotejamBaseTestCase):
                 url_for('edit_note', note_id=note.id),
                 data=self._get_note_data(name=new_name)
             )
-            self.assertEqual(new_name, Note.query.get(note.id).name)
+            self.assertEquals(new_name, Note.query.get(note.id).name)
 
     def test_edit_fail_required_fields(self):
         user = self.create_user(email='email@example.com', password='password')
@@ -281,7 +281,7 @@ class NoteTestCase(NotejamBaseTestCase):
                 url_for('edit_note', note_id=note.id),
                 data={'pad': '', 'name': '', 'text': ''}
             )
-            self.assertEqual(
+            self.assertEquals(
                 set(self._get_note_data().keys()),
                 set(self.get_context_variable('form').errors.keys())
             )
@@ -295,7 +295,7 @@ class NoteTestCase(NotejamBaseTestCase):
         with signed_in_user(another_user) as c:
             response = c.post(
                 url_for('edit_note', note_id=note.id), data={})
-            self.assertEqual(404, response.status_code)
+            self.assertEquals(404, response.status_code)
 
     def test_delete_success(self):
         user = self.create_user(email='email@example.com', password='password')
@@ -304,7 +304,7 @@ class NoteTestCase(NotejamBaseTestCase):
             response = c.post(
                 url_for('delete_note', note_id=note.id))
             self.assertRedirects(response, url_for('home'))
-            self.assertEqual(0, Note.query.count())
+            self.assertEquals(0, Note.query.count())
 
     def test_delete_fail_anothers_user(self):
         user = self.create_user(email='email@example.com', password='password')
@@ -314,7 +314,7 @@ class NoteTestCase(NotejamBaseTestCase):
         with signed_in_user(another_user) as c:
             response = c.post(
                 url_for('delete_note', note_id=note.id))
-            self.assertEqual(404, response.status_code)
+            self.assertEquals(404, response.status_code)
 
 
 @contextmanager

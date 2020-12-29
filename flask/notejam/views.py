@@ -1,10 +1,10 @@
 from datetime import date
-import md5
+import hashlib
 
 from flask import render_template, flash, request, redirect, url_for, abort
-from flask.ext.login import (login_user, login_required, logout_user,
+from flask_login import (login_user, login_required, logout_user,
 current_user)
-from flask.ext.mail import Message
+from flask_mail import Message
 
 from notejam import app, db, login_manager, mail
 from notejam.models import User, Note, Pad
@@ -79,10 +79,7 @@ def delete_note(note_id):
         db.session.delete(note)
         db.session.commit()
         flash('Note is successfully deleted', 'success')
-        if note.pad:
-            return redirect(url_for('pad_notes', pad_id=note.pad.id))
-        else:
-            return redirect(url_for('home'))
+        return redirect(url_for('home'))
     return render_template('notes/delete.html', note=note, form=delete_form)
 
 
@@ -211,7 +208,7 @@ def forgot_password():
 @app.context_processor
 def inject_user_pads():
     ''' inject list of user pads in template context '''
-    if not current_user.is_anonymous():
+    if not current_user.is_anonymous:
         return dict(pads=current_user.pads.all())
     return dict(pads=[])
 
@@ -256,7 +253,7 @@ def _get_order_by(param='-updated_at'):
 
 def _generate_password(user):
     ''' generate new user password '''
-    m = md5.new()
+    m = hashlib.md5()
     m.update(
         "{email}{secret}{date}".format(
             email=user.email,
