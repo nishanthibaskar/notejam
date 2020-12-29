@@ -4,7 +4,7 @@ Notejam: Flask
 
 Notejam application implemented using `Flask <http://flask.pocoo.org/>`_ microframework.
 
-Flask version: 0.9
+Flask version: 1.1.1
 
 Flask extension used:
 
