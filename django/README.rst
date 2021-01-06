@@ -31,6 +31,8 @@ Install dependencies:
 .. code-block:: bash
 
     $ cd YOUR_PROJECT_DIR/django/
+    $ virtualenv .venv -p python2.7     # This version of Django only works on python2
+    $ source .venv/bin/activate
     $ pip install -r requirements.txt
 
 Create database schema:
