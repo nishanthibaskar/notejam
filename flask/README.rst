@@ -4,7 +4,7 @@ Notejam: Flask
 
 Notejam application implemented using `Flask <http://flask.pocoo.org/>`_ microframework.
 
-Flask version: 0.9
+Flask version: 1.1.1
 
 Flask extension used:
 
@@ -26,7 +26,7 @@ Clone the repo:
 
 .. code-block:: bash
 
-    $ git clone git@github.com:komarserjio/notejam.git YOUR_PROJECT_DIR/
+    $ git clone git@github.com:nordcloud/notejam.git YOUR_PROJECT_DIR/
 
 -------
 Install

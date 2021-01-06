@@ -5,7 +5,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = 'notejam-flask-secret-key'
-    CSRF_ENABLED = True
+    WTF_CSRF_ENABLED = True
     CSRF_SESSION_KEY = 'notejam-flask-secret-key'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'notejam.db')
 
@@ -21,3 +21,4 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
+    WTF_CSRF_ENABLED = False
