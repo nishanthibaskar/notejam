@@ -13,7 +13,7 @@ output "subnet_cidr_blocks" {
 # EKS Cluster
 resource "aws_eks_cluster" "eks-cluster" {
   name     = "nord-cloud-cluster"
-  role_arn = aws_iam_role.EKSClusterRole.arn
+  role_arn = aws_iam_role.EKSNordCloudClusterRole.arn
   version  = "1.21"
 
   vpc_config {
@@ -44,9 +44,9 @@ resource "aws_eks_node_group" "node-ec2" {
   disk_size      = 10
 
   depends_on = [
-    aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
-    aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy
+    aws_iam_role_policy_attachment.AmazonEKSNordCloudWorkerNodePolicy,
+    aws_iam_role_policy_attachment.AmazonNordCloudEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.AmazonNordCloudEKS_CNI_Policy
   ]
   
   update_config {
