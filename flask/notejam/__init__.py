@@ -1,4 +1,5 @@
 from flask import Flask
+<<<<<<< HEAD
 from urllib.parse import urlparse
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -18,6 +19,16 @@ from_env = {'production': ProductionConfig,
 # @TODO use application factory approach
 app = Flask(__name__)
 app.config.from_object(from_env[os.environ.get('ENVIRONMENT', 'testing')])
+=======
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_mail import Mail
+
+# @TODO use application factory approach
+app = Flask(__name__)
+app.config.from_object('notejam.config.Config')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+>>>>>>> 8fecc935c6b6942feacba721851b964a00d8bdb1
 db = SQLAlchemy(app)
 
 

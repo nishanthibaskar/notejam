@@ -51,3 +51,11 @@ bower_components
 
 #.phar archives
 *.phar
+.venv/
+
+
+# VSCODE
+.vscode
+.bak
+
+
