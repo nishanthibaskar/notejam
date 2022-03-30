@@ -1,5 +1,5 @@
 **************
-Notejam: Flask
+Notejam: Flask: Nishanthi Version
 **************
 
 Notejam application implemented using `Flask <http://flask.pocoo.org/>`_ microframework.
