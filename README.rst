@@ -141,5 +141,3 @@ License
 MIT © Serhii Komar.
 
 See `license <https://github.com/komarserjio/notejam/blob/master/license.rst>`_.
-
-Nishanthi baskar taking the charge.
