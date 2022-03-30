@@ -19,7 +19,7 @@ WORKDIR /nordcloud/notejam/flask
 
 # Copy the runserver.py file into the image
 
-COPY runserverlocal.py .
+COPY flask/runserverlocal.py .
 
 
 #Install the requirements.txt
@@ -29,9 +29,9 @@ RUN amazon-linux-extras enable nginx1
 RUN yum clean metadata
 RUN yum -y install nginx
 
-COPY uwsgi.ini .
-COPY nginx.conf /etc/nginx/
-COPY startup.sh .
+COPY flask/uwsgi.ini .
+COPY flask/nginx.conf /etc/nginx/
+COPY flask/startup.sh .
 
 RUN chmod +x ./startup.sh
 
