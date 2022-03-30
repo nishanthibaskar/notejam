@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: nord-cloud-service
+spec:
+    selector:
+       app: nord-cloud-app
+    ports:
+      - protocol: "TCP"
+        port: 80
+        targetPort: 8080
+    type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+     name: nord-cloud-app
+     labels:
+        app: nord-cloud-app
+spec:
+   selector:
+      matchLabels:
+        app: nord-cloud-app
+   replicas: 1
+   template:
+      metadata:
+         labels:
+            app: nord-cloud-app
+      spec:
+        containers:
+          - name: nord-cloud-app
+            image: 514924332194.dkr.ecr.us-east-1.amazonaws.com/nishanthichakri:nord_cloud
+            imagePullPolicy: Always
+            ports:
+            - containerPort: 8080
