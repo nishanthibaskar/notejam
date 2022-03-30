@@ -31,7 +31,7 @@ spec:
       spec:
         containers:
           - name: nord-cloud-app
-            image: 514924332194.dkr.ecr.us-east-1.amazonaws.com/nishanthichakri:nord_cloud
+            image: 514924332194.dkr.ecr.eu-north-1.amazonaws.com/nordcloud:nord_cloud
             imagePullPolicy: Always
             ports:
             - containerPort: 8080
