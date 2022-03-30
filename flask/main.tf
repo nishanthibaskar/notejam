@@ -29,7 +29,7 @@ resource "aws_eks_cluster" "eks-cluster" {
 resource "aws_eks_node_group" "node-ec2" {
   cluster_name    = aws_eks_cluster.eks-cluster.name
   node_group_name = "t3_small-nord-cloud-group"
-  node_role_arn   = aws_iam_role.NodeGroupRole.arn
+  node_role_arn   = aws_iam_role.NordCloudNodeGroupRole.arn
   subnet_ids      = flatten( data.aws_subnet_ids.public.ids )
 
   scaling_config {
