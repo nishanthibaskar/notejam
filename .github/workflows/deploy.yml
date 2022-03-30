@@ -73,7 +73,7 @@ jobs:
        id: install
      
      - name: Update kube config
-       run: aws eks update-kubeconfig --name 3-shapes-cluster --region eu-north-1
+       run: aws eks update-kubeconfig --name nord-cloud-cluster --region eu-north-1
 
      - name: Deploy image to Amazon EKS
        run: |
