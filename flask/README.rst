@@ -89,3 +89,5 @@ Always prepend your commits with framework name:
     Flask: Implemented sign in functionality
 
 Read `contribution guide <https://github.com/komarserjio/notejam/blob/master/contribute.rst>`_ for details.
+
+This is for demo purpose
