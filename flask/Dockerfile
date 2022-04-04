@@ -1,5 +1,5 @@
 #Start by pulling the amazonlinux latest image
-FROM amazonlinux:latest
+FROM amazonlinux:2022
 
 RUN yum -y install git
 RUN yum -y install lsof
