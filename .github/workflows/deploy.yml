@@ -63,8 +63,7 @@ jobs:
        env:
          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
          ECR_REPOSITORY: nordcloud
-         IMAGE_TAG: nord_cloud
-       working-directory: ./flask/docker_image   
+         IMAGE_TAG: nord_cloud 
        run: |
          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
