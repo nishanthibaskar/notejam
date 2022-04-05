@@ -1,78 +1,57 @@
 **************
-Notejam: Flask: Nishanthi Version
+Notejam: Flask: Implementation on AWS EKS
+Author: Nishanthi Baskar
 **************
 
-Notejam application implemented using `Flask <http://flask.pocoo.org/>`_ microframework.
-
-Flask version: 1.1.1
-
-Flask extension used:
-
-* Flask-Login
-* Flask-Mail
-* Flask-SQLAlchemy
-* Flask-Testing
-* Flask-WTF
-
 ==========================
-Installation and launching
+Implementation on AWS EKS
 ==========================
+Docker: Dockerizing flask application
 
------
-Clone
------
+$ cd YOUR_PROJECT_DIR/flask/
+# Dockerfile is written to pull amazonlinux:latest image and install required packages on top of it to execute flask application.
 
-Clone the repo:
+Docker build and push the image to AWS ECR.
 
-.. code-block:: bash
+ $ aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 514924332194.dkr.ecr.eu-north-1.amazonaws.com  
+ $ docker build -t nordcloud .   (this will build the image and store it in local repo)
+ $ docker tag nordcloud:latest 514924332194.dkr.ecr.eu-north-1.amazonaws.com/nordcloud:nord_cloud
+ $ docker push 514924332194.dkr.ecr.eu-north-1.amazonaws.com/nordcloud:nord_cloud
+ 
+Creating EKS cluster and deploying ECR image:
 
-    $ git clone git@github.com:nordcloud/notejam.git YOUR_PROJECT_DIR/
+To create AWS resources required IAM roles, EKS cluster and ECR I used terraform
 
--------
-Install
--------
-Use `virtualenv <http://www.virtualenv.org>`_ or `virtualenvwrapper <http://virtualenvwrapper.readthedocs.org/>`_
-for `environment management <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_.
+Terraform execution:
 
-Install dependencies:
+$ cd YOUR_PROJECT_DIR/flask/terraform_files
+$ terraform init
+$ terraform validate
+$ terraform plan
+$ terraform apply
 
-.. code-block:: bash
+Deploy the application using kubectl.
 
-    $ cd YOUR_PROJECT_DIR/flask/
-    $ pip install -r requirements.txt
+$ aws eks update-kubeconfig --name nord-cloud-cluster --region eu-north-1
+$ kubectl apply -f deployment.yaml
 
-------
-Launch
-------
+Implementation with github actions:
 
-Start flask web server:
+This repository is activated with github actions by specifing .github/workflows/deploy.yml
+instead of running each command to achive docker build, docker push, AWS resource creation and kubectl application deployment, all these tasked are group together as a pipeline to run each of the task sequentially using github actions on push to a master branch.
+so whatever change happens inside the repo and on a successfull push to the master .github/workflows/deploy.yml gets executed and its flow is like below
 
-.. code-block:: bash
+1. Run terraform to create required AWS resources.
+2. Docker build and push to AWS ECR repo.
+3. Deploy the latest build docker image to AWS EKS cluster.
 
-    $ cd YOUR_PROJECT_DIR/flask/
-    $ python runserver.py
+====================================
+How to check your application url?
+====================================
 
-Go to http://127.0.0.1:5000/ in your browser.
+$ kubectl get services
 
-If you do like that, all data added will be stored in a in-memory SQLite database.
-If you want to keep the state, export the environment variable ENVIRONMENT:
-
-In a single line:
-
-.. code-block:: bash
-
-    $ ENVIRONMENT=development python runserver.py
-
----------
-Run tests
----------
-
-Run functional and unit tests:
-
-.. code-block:: bash
-
-    $ cd YOUR_PROJECT_DIR/flask/
-    $ python tests.py
+look for your specific loadbalancer url and enter it in the browser.
 
 
 ============
