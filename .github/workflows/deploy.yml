@@ -29,7 +29,7 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       working-directory: terraform_files    
+       working-directory: ./flask/terraform_files    
        run: terraform init -upgrade
 
      - name: Terraform validate
@@ -37,7 +37,7 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       working-directory: terraform_files    
+       working-directory: ./flask/terraform_files    
        run: terraform validate
 
      - name: Terraform apply
@@ -45,7 +45,7 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       working-directory: ./terraform_files
+       working-directory: ./flask/terraform_files
        run: terraform apply -auto-approve
 
      - name: Configure AWS credentials
@@ -64,7 +64,7 @@ jobs:
          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
          ECR_REPOSITORY: nordcloud
          IMAGE_TAG: nord_cloud
-       working-directory: ./docker_image   
+       working-directory: ./flask/docker_image   
        run: |
          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -80,6 +80,6 @@ jobs:
        run: aws eks update-kubeconfig --name nord-cloud-cluster --region eu-north-1
 
      - name: Deploy image to Amazon EKS
-       working-directory: ./kubectl_files
+       working-directory: ./flask/kubectl_files
        run: |
          kubectl apply -f deployment.yaml
