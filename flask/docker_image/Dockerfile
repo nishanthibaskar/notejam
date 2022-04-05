@@ -19,7 +19,7 @@ WORKDIR /nordcloud/notejam/flask
 
 # Copy the runserver.py file into the image
 
-COPY ../runserverlocal.py .
+COPY /home/runner/work/notejam/notejam/flask/runserverlocal.py .
 
 
 #Install the requirements.txt
@@ -29,12 +29,12 @@ RUN amazon-linux-extras enable nginx1
 RUN yum clean metadata
 RUN yum -y install nginx
 
-COPY ../uwsgi_socket/uwsgi.ini .
-COPY ../uwsgi_socket/nginx.conf /etc/nginx/
-COPY ../uwsgi_socket/startup.sh .
+COPY /home/runner/work/notejam/notejam/flask/uwsgi_socket/uwsgi.ini .
+COPY /home/runner/work/notejam/notejam/flask/uwsgi_socket/nginx.conf /etc/nginx/
+COPY /home/runner/work/notejam/notejam/flask/uwsgi_socket/startup.sh .
 
-RUN chmod +x ./startup.sh
+RUN chmod +x /home/runner/work/notejam/notejam/flask/uwsgi_socket/startup.sh
 
 EXPOSE 8080
 
-CMD [ "./startup.sh" ]
+CMD [ "/home/runner/work/notejam/notejam/flask/uwsgi_socket/startup.sh" ]
